@@ -43,6 +43,13 @@ while running:
         if event.type == pygame.MOUSEBUTTONUP:  # Implement snapping and letting go of pieces
             if ActivePiece is not None:
                 if event.button == 1:
+
+                    # Updating ColourToPlay
+                    if ActivePiece.colour == 'white':
+                        ColourToPlay = 'black'
+                    else:
+                        ColourToPlay = 'white'
+
                     ActivePiece = None
 
     clock.tick(60)
