@@ -29,6 +29,22 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+        if event.type == pygame.MOUSEBUTTONDOWN:  # Implement picking up of pieces
+            if event.button == 1:
+                for it, piece in enumerate(ActivePieces):
+                    if piece.colour == ColourToPlay:
+                        if piece.rect.collidepoint(event.pos):
+                            ActivePiece = piece
+
+        if event.type == pygame.MOUSEMOTION:  # Implement mouse motion
+            if ActivePiece is not None:
+                ActivePiece.rect.move_ip(event.rel)
+
+        if event.type == pygame.MOUSEBUTTONUP:  # Implement snapping and letting go of pieces
+            if ActivePiece is not None:
+                if event.button == 1:
+                    ActivePiece = None
+
     clock.tick(60)
     pygame.display.flip()
 
