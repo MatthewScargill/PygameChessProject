@@ -15,7 +15,7 @@ class Square:
         self.file = self.number % 8
         self.rank = self.number // 8
 
-        if self.piece != None:
+        if self.piece is not None:
             self.piece.rect.center = self.position
 
         # Colour coding (could be melted into one)
@@ -32,7 +32,6 @@ class Square:
         self.rect = rect
 
         # this is collision detection foundation
-
 
 
 class Board:

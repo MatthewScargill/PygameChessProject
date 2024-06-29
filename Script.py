@@ -16,8 +16,7 @@ ColourToPlay = 'white'
 
 # Board setup
 ActiveBoard = Board()
-ActivePieces = Setup.initsetup(ActiveBoard.squares)[1]
-ActiveBoard.squares = Setup.initsetup(ActiveBoard.squares)[0]
+ActiveBoard.squares, ActivePieces = Setup.initsetup(ActiveBoard.squares)
 
 while running:
 
