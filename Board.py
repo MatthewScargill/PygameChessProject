@@ -43,20 +43,21 @@ class Board:
         for i in range(64):
             squares.append(Square(i, None))
         self.squares = squares
+        self.pieces = None
 
     def draw(self, screen):
         for square in self.squares:
             pygame.draw.rect(screen, square.printcolour, square.rect)
 
-    def takes(self, pieces, ActivePiece):
-        for piece in pieces:
+    def takes(self, ActivePiece):
+        for piece in self.pieces:
             if piece.colour != ActivePiece.colour:
                 if piece.rect.colliderect(ActivePiece.rect):
                     piece.kill()
 
-    def update(self, pieces):  # Updates square information
+    def update(self):  # Updates square information
         for square in self.squares:
-            for piece in pieces:
+            for piece in self.pieces:
                 if square.rect.collidepoint(piece.rect.center):  # Checks if piece collides with square
                     piece.rect.center = square.position  # Snap rect to center of square
                     square.piece = piece  # Update Square.piece
@@ -123,4 +124,4 @@ class Board:
         self.squares[59] = Square(59, blackqueen)
         pieces.add(blackqueen)
 
-        return pieces
+        self.pieces = pieces

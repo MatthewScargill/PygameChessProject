@@ -18,13 +18,13 @@ ColourToPlay = 'white'
 
 # Board setup
 ActiveBoard = Board()
-ActivePieces = Board.init_piece_setup(ActiveBoard)
+Board.init_piece_setup(ActiveBoard)
 
 while running:
 
     # Board maintenance
     ActiveBoard.draw(screen)
-    ActivePieces.draw(screen)
+    ActiveBoard.pieces.draw(screen)
 
     for event in pygame.event.get():
 
@@ -44,7 +44,7 @@ while running:
                             print(square.piece.colour)
 
                 # Activating ActivePiece
-                for it, piece in enumerate(ActivePieces):
+                for it, piece in enumerate(ActiveBoard.pieces):
                     if piece.colour == ColourToPlay:
                         if piece.rect.collidepoint(event.pos):
                             ActivePiece = piece
@@ -60,10 +60,10 @@ while running:
                 if event.button == 1:
 
                     # Checks if there is a piece to take and then takes it
-                    Board.takes(ActiveBoard, ActivePieces, ActivePiece)
+                    Board.takes(ActiveBoard, ActivePiece)
 
                     # Update ActiveBoard with new piece positions
-                    Board.update(ActiveBoard, ActivePieces)
+                    Board.update(ActiveBoard)
 
                     # Updating ColourToPlay
                     if ActivePiece.colour == 'white':
