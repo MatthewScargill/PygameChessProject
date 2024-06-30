@@ -1,6 +1,5 @@
 import pygame
 from Board import Board
-# import Setup
 
 # Setting screen and square dimensions
 Dimensions = Window_Width = Window_Height = 800
@@ -59,6 +58,9 @@ while running:
         if event.type == pygame.MOUSEBUTTONUP:
             if ActivePiece is not None:
                 if event.button == 1:
+
+                    # Checks if there is a piece to take and then takes it
+                    Board.takes(ActiveBoard, ActivePieces, ActivePiece)
 
                     # Update ActiveBoard with new piece positions
                     Board.update(ActiveBoard, ActivePieces)

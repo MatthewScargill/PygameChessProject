@@ -48,6 +48,12 @@ class Board:
         for square in self.squares:
             pygame.draw.rect(screen, square.printcolour, square.rect)
 
+    def takes(self, pieces, ActivePiece):
+        for piece in pieces:
+            if piece.colour != ActivePiece.colour:
+                if piece.rect.colliderect(ActivePiece.rect):
+                    piece.kill()
+
     def update(self, pieces):  # Updates square information
         for square in self.squares:
             for piece in pieces:
