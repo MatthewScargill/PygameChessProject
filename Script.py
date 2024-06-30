@@ -1,6 +1,6 @@
 import pygame
 from Board import Board
-import Setup
+# import Setup
 
 # Setting screen and square dimensions
 Dimensions = Window_Width = Window_Height = 800
@@ -19,7 +19,7 @@ ColourToPlay = 'white'
 
 # Board setup
 ActiveBoard = Board()
-ActiveBoard.squares, ActivePieces = Setup.initsetup(ActiveBoard.squares)
+ActivePieces = Board.init_piece_setup(ActiveBoard)
 
 while running:
 
