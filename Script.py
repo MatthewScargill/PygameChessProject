@@ -35,7 +35,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
 
-                # Benchmark code for update Board.update
+                # Troubleshoot code for update Board.update
                 for square in ActiveBoard.squares:
                     if square.rect.collidepoint(pygame.mouse.get_pos()):
                         print(square.number)
@@ -43,11 +43,22 @@ while running:
                         if square.piece is not None:
                             print(square.piece.colour)
 
-                # Activating ActivePiece
                 for it, piece in enumerate(ActiveBoard.pieces):
                     if piece.colour == ColourToPlay:
                         if piece.rect.collidepoint(event.pos):
+
+                            # Activating ActivePiece
                             ActivePiece = piece
+
+                            # Note original rect position
+                            OriginalCoordinate = ActivePiece.rect.center
+
+                            # Acceptable squares setup
+                            AcceptableSquares = Board.acceptablesquares(ActiveBoard, ActivePiece)
+
+                            # Troubleshoot code for acceptable squares function
+                            for square in AcceptableSquares:
+                                print(square.number)
 
         # Moving ActivePiece.rect
         if event.type == pygame.MOUSEMOTION:
@@ -58,18 +69,29 @@ while running:
         if event.type == pygame.MOUSEBUTTONUP:
             if ActivePiece is not None:
                 if event.button == 1:
+                    for square in AcceptableSquares:
+                        if square.rect.collidepoint(ActivePiece.rect.center):
 
-                    # Checks if there is a piece to take and then takes it
-                    Board.takes(ActiveBoard, ActivePiece)
+                            # Checks if there is a piece to take and then takes it
+                            Board.takes(ActiveBoard, ActivePiece)
 
-                    # Update ActiveBoard with new piece positions
-                    Board.update(ActiveBoard)
+                            # Update ActiveBoard with new piece positions
+                            Board.update(ActiveBoard)
 
-                    # Updating ColourToPlay
-                    if ActivePiece.colour == 'white':
-                        ColourToPlay = 'black'
+                            # Updating ColourToPlay
+                            if ActivePiece.colour == 'white':
+                                ColourToPlay = 'black'
+                            else:
+                                ColourToPlay = 'white'
+
+                            break
+
                     else:
-                        ColourToPlay = 'white'
+                        # Reset piece location
+                        ActivePiece.rect.center = OriginalCoordinate
+
+                        # Revert ActiveBoard with old piece positions
+                        Board.update(ActiveBoard)
 
                     # Deactivate ActivePiece
                     ActivePiece = None

@@ -65,6 +65,43 @@ class Board:
                 if not square.rect.collidepoint(piece.rect.center):  # If no collisions, No piece
                     square.piece = None  # Update Square.piece
 
+    def acceptablesquares(self, ActivePiece):
+
+        AcceptableSquares = []
+
+        if ActivePiece.name == 1:  # Pawn
+            for square in self.squares:
+                if square.rect.collidepoint(ActivePiece.rect.center):
+                    if ActivePiece.colour == 'white':
+                        if self.squares[square.number + 8].piece is None:
+                            AcceptableSquares.append(self.squares[square.number + 8])
+                            if self.squares[square.number + 16].piece is None and square.rank == 1:
+                                AcceptableSquares.append(self.squares[square.number + 16])
+
+                    if ActivePiece.colour == 'black':
+                        if self.squares[square.number - 8].piece is None:
+                            AcceptableSquares.append(self.squares[square.number - 8])
+                            if self.squares[square.number - 16].piece is None and square.rank == 6:
+                                AcceptableSquares.append(self.squares[square.number - 16])
+
+        if ActivePiece.name == 2:
+            AcceptableSquares = self.squares
+
+        if ActivePiece.name == 3:
+            AcceptableSquares = self.squares
+
+        if ActivePiece.name == 4:
+            AcceptableSquares = self.squares
+
+        if ActivePiece.name == 5:
+            AcceptableSquares = self.squares
+
+        if ActivePiece.name == 6:
+            AcceptableSquares = self.squares
+
+        return AcceptableSquares
+
+
     def init_piece_setup(self):
         pieces = pygame.sprite.Group()
 
