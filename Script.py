@@ -2,15 +2,18 @@ import pygame
 from Board import Board
 import Setup
 
+# Setting screen and square dimensions
 Dimensions = Window_Width = Window_Height = 800
 BlockSize = int(Dimensions/8)
 
+# Pygame setup
 pygame.init()
 screen = pygame.display.set_mode((Dimensions, Dimensions))
 clock = pygame.time.Clock()
 pygame.display.set_caption("LiterallyUnplayableChess")
 running = True
 
+# Switch setup
 ActivePiece = None
 ColourToPlay = 'white'
 
@@ -21,7 +24,7 @@ ActiveBoard.squares, ActivePieces = Setup.initsetup(ActiveBoard.squares)
 while running:
 
     # Board maintenance
-    ActiveBoard.drawboard(screen)
+    ActiveBoard.draw(screen)
     ActivePieces.draw(screen)
 
     for event in pygame.event.get():
@@ -29,20 +32,36 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        if event.type == pygame.MOUSEBUTTONDOWN:  # Implement picking up of pieces
+        # Selecting ActivePiece
+        if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
+
+                # Benchmark code for update Board.update
+                for square in ActiveBoard.squares:
+                    if square.rect.collidepoint(pygame.mouse.get_pos()):
+                        print(square.number)
+                        print(square.piece)
+                        if square.piece is not None:
+                            print(square.piece.colour)
+
+                # Activating ActivePiece
                 for it, piece in enumerate(ActivePieces):
                     if piece.colour == ColourToPlay:
                         if piece.rect.collidepoint(event.pos):
                             ActivePiece = piece
 
-        if event.type == pygame.MOUSEMOTION:  # Implement mouse motion
+        # Moving ActivePiece.rect
+        if event.type == pygame.MOUSEMOTION:
             if ActivePiece is not None:
-                ActivePiece.rect.move_ip(event.rel)
+                ActivePiece.rect.center = (pygame.mouse.get_pos())
 
-        if event.type == pygame.MOUSEBUTTONUP:  # Implement snapping and letting go of pieces
+        # Deselecting ActivePiece
+        if event.type == pygame.MOUSEBUTTONUP:
             if ActivePiece is not None:
                 if event.button == 1:
+
+                    # Update ActiveBoard with new piece positions
+                    Board.update(ActiveBoard, ActivePieces)
 
                     # Updating ColourToPlay
                     if ActivePiece.colour == 'white':
@@ -50,9 +69,10 @@ while running:
                     else:
                         ColourToPlay = 'white'
 
+                    # Deactivate ActivePiece
                     ActivePiece = None
 
-    clock.tick(60)
-    pygame.display.flip()
+    clock.tick(60)  # Set fps to 60
+    pygame.display.flip()  # Update screen
 
 pygame.quit()
