@@ -55,9 +55,11 @@ class Board:
 
     def takes(self, ActivePiece):
         for piece in self.pieces:
-            if piece.colour != ActivePiece.colour:
-                if piece.rect.collidepoint(ActivePiece.rect.center):
-                    piece.kill()
+            for square in self.squares:
+                if square.rect.collidepoint(piece.rect.center):
+                    if piece.colour != ActivePiece.colour:
+                        if square.rect.collidepoint(ActivePiece.rect.center):
+                            piece.kill()
 
     def update(self):  # Updates square information
         for square in self.squares:
