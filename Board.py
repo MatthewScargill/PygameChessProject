@@ -95,10 +95,10 @@ class Board:
                         # Pawn attacks
                         if (self.squares[square.number - 7].piece is not None and self.squares[square.number - 7].piece.
                                 colour == 'white'):
-                                AcceptableSquares.append(self.squares[square.number - 7])
+                            AcceptableSquares.append(self.squares[square.number - 7])
                         if (self.squares[square.number - 9].piece is not None and self.squares[square.number - 9].piece.
                                 colour == 'white'):
-                                AcceptableSquares.append(self.squares[square.number - 9])
+                            AcceptableSquares.append(self.squares[square.number - 9])
 
         if ActivePiece.name == 2 or ActivePiece.name == 6:  # Vertical and Horizontal Moves (Rook and half of Queen)
             for square in self.squares:
@@ -155,9 +155,61 @@ class Board:
         if ActivePiece.name == 3:  # Knight
             AcceptableSquares = self.squares
 
-        if ActivePiece.name == 4 or ActivePiece.name == 6:  # Diagonal Movements (Bishop and half of Queens)
-            AcceptableSquares = self.squares
+        if ActivePiece.name == 4 or ActivePiece.name == 6:  # Diagonal Movements (Bishop and half of Queen)
+            for square in self.squares:
+                if square.rect.collidepoint(ActivePiece.rect.center):
 
+                    for i in range(1, min(7 - square.rank, square.file) + 1):  # Top Left
+                        if int(square.number + i * 7) <= 63:  # Check still in range
+                            if (self.squares[square.number + i * 7].file == square.file - i
+                                    and self.squares[square.number + i * 7].rank == square.rank + i):
+                                if self.squares[square.number + i * 7].piece is None:
+                                    AcceptableSquares.append(self.squares[square.number + i * 7])
+                                if self.squares[square.number + i * 7].piece is not None:
+                                    if self.squares[square.number + i * 7].piece.colour != square.piece.colour:
+                                        AcceptableSquares.append(self.squares[square.number + i * 7])
+                                        break
+                                    else:
+                                        break
+
+                    for i in range(1, min(7 - square.rank, 7 - square.file) + 1):  # Top Right
+                        if int(square.number + i * 7) <= 63:  # Check still in range
+                            if (self.squares[square.number + i * 9].file == square.file + i
+                                    and self.squares[square.number + i * 9].rank == square.rank + i):
+                                if self.squares[square.number + i * 9].piece is None:
+                                    AcceptableSquares.append(self.squares[square.number + i * 9])
+                                if self.squares[square.number + i * 9].piece is not None:
+                                    if self.squares[square.number + i * 9].piece.colour != square.piece.colour:
+                                        AcceptableSquares.append(self.squares[square.number + i * 9])
+                                        break
+                                    else:
+                                        break
+
+                    for i in range(1, min(square.rank, square.file) + 1):  # Bottom Left
+                        if int(square.number - i * 9) >= 0:  # Check still in range
+                            if (self.squares[square.number - i * 9].file == square.file - i
+                                    and self.squares[square.number - i * 9].rank == square.rank - i):
+                                if self.squares[square.number - i * 9].piece is None:
+                                    AcceptableSquares.append(self.squares[square.number - i * 9])
+                                if self.squares[square.number - i * 9].piece is not None:
+                                    if self.squares[square.number - i * 9].piece.colour != square.piece.colour:
+                                        AcceptableSquares.append(self.squares[square.number - i * 9])
+                                        break
+                                    else:
+                                        break
+
+                    for i in range(1, min(square.rank, 7 - square.file) + 1):  # Bottom Right
+                        if int(square.number - i * 7) >= 0:  # Check still in range
+                            if (self.squares[square.number - i * 7].file == square.file + i
+                                    and self.squares[square.number - i * 7].rank == square.rank - i):
+                                if self.squares[square.number - i * 7].piece is None:
+                                    AcceptableSquares.append(self.squares[square.number - i * 7])
+                                if self.squares[square.number - i * 7].piece is not None:
+                                    if self.squares[square.number - i * 7].piece.colour != square.piece.colour:
+                                        AcceptableSquares.append(self.squares[square.number - i * 7])
+                                        break
+                                    else:
+                                        break
 
         if ActivePiece.name == 5:  # King
             for square in self.squares:
@@ -171,11 +223,7 @@ class Board:
                                 if self.squares[square.number + i].piece.colour != square.piece.colour:
                                     AcceptableSquares.append(self.squares[square.number + i])
 
-        if ActivePiece.name == 6:  # Queen
-            AcceptableSquares = self.squares
-
         return AcceptableSquares
-
 
     def init_piece_setup(self):
         pieces = pygame.sprite.Group()

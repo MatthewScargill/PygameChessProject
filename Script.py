@@ -67,7 +67,6 @@ while running:
             if ActivePiece is not None:
                 ActivePiece.rect.center = (pygame.mouse.get_pos())
 
-
         # Deselecting ActivePiece
         if event.type == pygame.MOUSEBUTTONUP:
             if ActivePiece is not None:
