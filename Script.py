@@ -42,6 +42,7 @@ while running:
                         print(square.piece)
                         if square.piece is not None:
                             print(square.piece.colour)
+                            print(square.piece.name)
 
                 for it, piece in enumerate(ActiveBoard.pieces):
                     if piece.colour == ColourToPlay:
@@ -58,12 +59,14 @@ while running:
 
                             # Troubleshoot code for acceptable squares function
                             for square in AcceptableSquares:
+                                square.printcolour = 'red'
                                 print(square.number)
 
         # Moving ActivePiece.rect
         if event.type == pygame.MOUSEMOTION:
             if ActivePiece is not None:
                 ActivePiece.rect.center = (pygame.mouse.get_pos())
+
 
         # Deselecting ActivePiece
         if event.type == pygame.MOUSEBUTTONUP:

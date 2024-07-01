@@ -73,10 +73,18 @@ class Board:
             for square in self.squares:
                 if square.rect.collidepoint(ActivePiece.rect.center):
                     if ActivePiece.colour == 'white':
-                        if self.squares[square.number + 8].piece is None:
+                        if self.squares[square.number + 8].piece is None:  # Standard movement
                             AcceptableSquares.append(self.squares[square.number + 8])
-                            if self.squares[square.number + 16].piece is None and square.rank == 1:
+                            if self.squares[square.number + 16].piece is None and square.rank == 1:  # Double move
                                 AcceptableSquares.append(self.squares[square.number + 16])
+
+                        # Pawn attacks
+                        if (self.squares[square.number + 7].piece is not None and self.squares[square.number + 7].piece.
+                                colour == 'black'):
+                            AcceptableSquares.append(self.squares[square.number + 7])
+                        if (self.squares[square.number + 9].piece is not None and self.squares[square.number + 9].piece.
+                                colour == 'black'):
+                            AcceptableSquares.append(self.squares[square.number + 9])
 
                     if ActivePiece.colour == 'black':
                         if self.squares[square.number - 8].piece is None:
@@ -84,19 +92,86 @@ class Board:
                             if self.squares[square.number - 16].piece is None and square.rank == 6:
                                 AcceptableSquares.append(self.squares[square.number - 16])
 
-        if ActivePiece.name == 2:
+                        # Pawn attacks
+                        if (self.squares[square.number - 7].piece is not None and self.squares[square.number - 7].piece.
+                                colour == 'white'):
+                                AcceptableSquares.append(self.squares[square.number - 7])
+                        if (self.squares[square.number - 9].piece is not None and self.squares[square.number - 9].piece.
+                                colour == 'white'):
+                                AcceptableSquares.append(self.squares[square.number - 9])
+
+        if ActivePiece.name == 2 or ActivePiece.name == 6:  # Vertical and Horizontal Moves (Rook and half of Queen)
+            for square in self.squares:
+                if square.rect.collidepoint(ActivePiece.rect.center):
+
+                    for i in range(1, 8):  # Right
+                        if int(square.number + i) <= 63:  # Check still in range
+                            if self.squares[square.number + i].rank == square.rank:
+                                if self.squares[square.number + i].piece is None:
+                                    AcceptableSquares.append(self.squares[square.number + i])
+                                if self.squares[square.number + i].piece is not None:
+                                    if self.squares[square.number + i].piece.colour != square.piece.colour:
+                                        AcceptableSquares.append(self.squares[square.number + i])
+                                        break
+                                    else:
+                                        break
+
+                    for i in range(1, 8):  # Left
+                        if int(square.number - i) >= 0:  # Check still in range
+                            if self.squares[square.number - i].rank == square.rank:
+                                if self.squares[square.number - i].piece is None:
+                                    AcceptableSquares.append(self.squares[square.number - i])
+                                if self.squares[square.number - i].piece is not None:
+                                    if self.squares[square.number - i].piece.colour != square.piece.colour:
+                                        AcceptableSquares.append(self.squares[square.number - i])
+                                        break
+                                    else:
+                                        break
+
+                    for i in range(1, 8):  # Down
+                        if int(square.number - i * 8) >= 0:  # Check still in range
+                            if self.squares[square.number - i * 8].file == square.file:
+                                if self.squares[square.number - i * 8].piece is None:
+                                    AcceptableSquares.append(self.squares[square.number - i * 8])
+                                if self.squares[square.number - i * 8].piece is not None:
+                                    if self.squares[square.number - i * 8].piece.colour != square.piece.colour:
+                                        AcceptableSquares.append(self.squares[square.number - i * 8])
+                                        break
+                                    else:
+                                        break
+
+                    for i in range(1, 8):  # Up
+                        if int(square.number + i * 8) <= 63:  # Check still in range
+                            if self.squares[square.number + i * 8].file == square.file:
+                                if self.squares[square.number + i * 8].piece is None:
+                                    AcceptableSquares.append(self.squares[square.number + i * 8])
+                                if self.squares[square.number + i * 8].piece is not None:
+                                    if self.squares[square.number + i * 8].piece.colour != square.piece.colour:
+                                        AcceptableSquares.append(self.squares[square.number + i * 8])
+                                        break
+                                    else:
+                                        break
+
+        if ActivePiece.name == 3:  # Knight
             AcceptableSquares = self.squares
 
-        if ActivePiece.name == 3:
+        if ActivePiece.name == 4 or ActivePiece.name == 6:  # Diagonal Movements (Bishop and half of Queens)
             AcceptableSquares = self.squares
 
-        if ActivePiece.name == 4:
-            AcceptableSquares = self.squares
 
-        if ActivePiece.name == 5:
-            AcceptableSquares = self.squares
+        if ActivePiece.name == 5:  # King
+            for square in self.squares:
+                if square.rect.collidepoint(ActivePiece.rect.center):
+                    kingmoves = [-9, -8, -7, -1, 1, 7, 8, 9]
+                    for i in kingmoves:
+                        if int(square.number + i) in range(63):
+                            if self.squares[square.number + i].piece is None:
+                                AcceptableSquares.append(self.squares[square.number + i])
+                            if self.squares[square.number + i].piece is not None:
+                                if self.squares[square.number + i].piece.colour != square.piece.colour:
+                                    AcceptableSquares.append(self.squares[square.number + i])
 
-        if ActivePiece.name == 6:
+        if ActivePiece.name == 6:  # Queen
             AcceptableSquares = self.squares
 
         return AcceptableSquares
