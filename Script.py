@@ -98,7 +98,6 @@ while running:
                     for square in AcceptableSquares:
                         square.printcolour = square.basecolour
 
-
                     # Deactivate ActivePiece
                     ActivePiece = None
 

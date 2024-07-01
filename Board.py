@@ -71,6 +71,16 @@ class Board:
                 if not square.rect.collidepoint(piece.rect.center):  # If no collisions, No piece
                     square.piece = None  # Update Square.piece
 
+    '''
+    def unacceptablesquares(self):
+        UnacceptableKingSquares = []
+        for piece in self.pieces:
+            for square in self.pieces:
+                if square.rect.collidepoint(piece.rect.center):
+                    if piece.colour != ActivePiece.colour:
+                        UnacceptableKingSquares.append(square)
+                        
+    '''
     def acceptablesquares(self, ActivePiece):
 
         AcceptableSquares = []
@@ -158,8 +168,26 @@ class Board:
                                     else:
                                         break
 
-        if ActivePiece.name == 3:  # Knight
-            AcceptableSquares = self.squares
+        if ActivePiece.name == 3:  # Knight Moves
+            for square in self.squares:
+                if square.rect.collidepoint(ActivePiece.rect.center):
+                    knightmoves = [-17, -15, -6, -10, 10, 6, 15, 17]
+                    for i in knightmoves:
+                        if int(square.number + i) in range(63):
+                            if abs(self.squares[square.number + i].rank - square.rank) == 2 and abs(
+                                    self.squares[square.number +i].file - square.file) == 1:
+                                if self.squares[square.number + i].piece is None:
+                                    AcceptableSquares.append(self.squares[square.number + i])
+                                if self.squares[square.number + i].piece is not None:
+                                    if self.squares[square.number + i].piece.colour != square.piece.colour:
+                                        AcceptableSquares.append(self.squares[square.number + i])
+                            elif abs(self.squares[square.number + i].rank - square.rank) == 1 and abs(
+                                self.squares[square.number + i].file - square.file) == 2:
+                                if self.squares[square.number + i].piece is None:
+                                    AcceptableSquares.append(self.squares[square.number + i])
+                                if self.squares[square.number + i].piece is not None:
+                                    if self.squares[square.number + i].piece.colour != square.piece.colour:
+                                        AcceptableSquares.append(self.squares[square.number + i])
 
         if ActivePiece.name == 4 or ActivePiece.name == 6:  # Diagonal Movements (Bishop and half of Queen)
             for square in self.squares:
