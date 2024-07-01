@@ -57,10 +57,9 @@ while running:
                             # Acceptable squares setup
                             AcceptableSquares = Board.acceptablesquares(ActiveBoard, ActivePiece)
 
-                            # Troubleshoot code for acceptable squares function
+                            # Deactivate Acceptable squares colour shift
                             for square in AcceptableSquares:
-                                square.printcolour = 'red'
-                                print(square.number)
+                                square.printcolour = square.activecolour
 
         # Moving ActivePiece.rect
         if event.type == pygame.MOUSEMOTION:
@@ -94,6 +93,11 @@ while running:
 
                         # Revert ActiveBoard with old piece positions
                         Board.update(ActiveBoard)
+
+                    # Deactivate Acceptable squares colour shift
+                    for square in AcceptableSquares:
+                        square.printcolour = square.basecolour
+
 
                     # Deactivate ActivePiece
                     ActivePiece = None

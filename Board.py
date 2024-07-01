@@ -25,10 +25,14 @@ class Square:
         # Colour coding (could be melted into one)
         if (self.rank + self.file) % 2 == 0:
             self.colour = 'black'
-            self.printcolour = (0, 141, 94)
+            self.basecolour = (0, 141, 94)
+            self.activecolour = (250, 51, 4)
+            self.printcolour = self.basecolour
         else:
             self.colour = 'white'
-            self.printcolour = (250, 250, 250)
+            self.basecolour = (250, 250, 250)
+            self.activecolour = (250, 100, 100)
+            self.printcolour = self.basecolour
 
         # Rect setup
         rect = pygame.rect.Rect(0, 0, BlockSize, BlockSize)
