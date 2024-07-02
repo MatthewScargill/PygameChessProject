@@ -1,5 +1,5 @@
 import pygame
-from Board import Board
+from src.Board import Board
 
 # Setting screen and square dimensions
 Dimensions = Window_Width = Window_Height = 800

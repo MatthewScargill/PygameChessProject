@@ -15,9 +15,9 @@ class Pawn(Piece):
         # Colour sorting
         self.colour = colour
         if self.colour == "black":
-            self.image = pygame.image.load('PieceImages/Chess_pdt60.png')
+            self.image = pygame.image.load('../rsc/Chess_pdt60.png')
         else:
-            self.image = pygame.image.load('PieceImages/Chess_plt60.png')
+            self.image = pygame.image.load('../rsc/Chess_plt60.png')
         self.rect = self.image.get_rect()
 
 
@@ -29,9 +29,9 @@ class Rook(Piece):
 
         self.colour = colour
         if self.colour == "black":
-            self.image = pygame.image.load('PieceImages/Chess_rdt60.png')
+            self.image = pygame.image.load('../rsc/Chess_rdt60.png')
         else:
-            self.image = pygame.image.load('PieceImages/Chess_rlt60.png')
+            self.image = pygame.image.load('../rsc/Chess_rlt60.png')
         self.rect = self.image.get_rect()
 
 
@@ -43,9 +43,9 @@ class Knight(Piece):
 
         self.colour = colour
         if self.colour == "black":
-            self.image = pygame.image.load('PieceImages/Chess_ndt60.png')
+            self.image = pygame.image.load('../rsc/Chess_ndt60.png')
         else:
-            self.image = pygame.image.load('PieceImages/Chess_nlt60.png')
+            self.image = pygame.image.load('../rsc/Chess_nlt60.png')
         self.rect = self.image.get_rect()
 
 
@@ -57,9 +57,9 @@ class Bishop(Piece):
 
         self.colour = colour
         if self.colour == "black":
-            self.image = pygame.image.load('PieceImages/Chess_bdt60.png')
+            self.image = pygame.image.load('../rsc/Chess_bdt60.png')
         else:
-            self.image = pygame.image.load('PieceImages/Chess_blt60.png')
+            self.image = pygame.image.load('../rsc/Chess_blt60.png')
         self.rect = self.image.get_rect()
 
 
@@ -71,9 +71,9 @@ class King(Piece):
 
         self.colour = colour
         if self.colour == "black":
-            self.image = pygame.image.load('PieceImages/Chess_kdt60.png')
+            self.image = pygame.image.load('../rsc/Chess_kdt60.png')
         else:
-            self.image = pygame.image.load('PieceImages/Chess_klt60.png')
+            self.image = pygame.image.load('../rsc/Chess_klt60.png')
         self.rect = self.image.get_rect()
 
 
@@ -85,7 +85,7 @@ class Queen(Piece):
 
         self.colour = colour
         if self.colour == "black":
-            self.image = pygame.image.load('PieceImages/Chess_qdt60.png')
+            self.image = pygame.image.load('../rsc/Chess_qdt60.png')
         else:
-            self.image = pygame.image.load('PieceImages/Chess_qlt60.png')
+            self.image = pygame.image.load('../rsc/Chess_qlt60.png')
         self.rect = self.image.get_rect()

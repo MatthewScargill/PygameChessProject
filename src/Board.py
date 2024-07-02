@@ -71,16 +71,6 @@ class Board:
                 if not square.rect.collidepoint(piece.rect.center):  # If no collisions, No piece
                     square.piece = None  # Update Square.piece
 
-    '''
-    def unacceptablesquares(self):
-        UnacceptableKingSquares = []
-        for piece in self.pieces:
-            for square in self.pieces:
-                if square.rect.collidepoint(piece.rect.center):
-                    if piece.colour != ActivePiece.colour:
-                        UnacceptableKingSquares.append(square)
-                        
-    '''
     def acceptablesquares(self, ActivePiece):
 
         AcceptableSquares = []
