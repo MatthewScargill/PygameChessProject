@@ -55,16 +55,17 @@ while running:
                             OriginalCoordinate = ActivePiece.rect.center
 
                             # Acceptable squares setup
-                            AcceptableSquares = Board.acceptablesquares(ActiveBoard, ActivePiece)
+                            AcceptableSquares = Board.acceptablesquares(ActiveBoard, ActivePiece)[0]
 
                             # Activate Acceptable squares colour shift
                             for square in AcceptableSquares:
                                 square.printcolour = square.activecolour
-
+                            
                             # Trial code for attacked squares function
-                            Attackedsquares = Board.attackedsquares(ActiveBoard, ActivePiece.colour)
+                            Attackedsquares = Board.colourattackedsquares(ActiveBoard, ActivePiece.colour)
                             for square in Attackedsquares:
                                 square.printcolour = square.activecolour
+
 
         # Moving ActivePiece.rect
         if event.type == pygame.MOUSEMOTION:
@@ -106,6 +107,7 @@ while running:
                     # Trial code for attacked squares function
                     for square in Attackedsquares:
                         square.printcolour = square.basecolour
+
 
                     # Deactivate ActivePiece
                     ActivePiece = None
