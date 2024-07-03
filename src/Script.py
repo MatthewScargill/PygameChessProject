@@ -57,8 +57,13 @@ while running:
                             # Acceptable squares setup
                             AcceptableSquares = Board.acceptablesquares(ActiveBoard, ActivePiece)
 
-                            # Deactivate Acceptable squares colour shift
+                            # Activate Acceptable squares colour shift
                             for square in AcceptableSquares:
+                                square.printcolour = square.activecolour
+
+                            # Trial code for attacked squares function
+                            Attackedsquares = Board.attackedsquares(ActiveBoard, ActivePiece.colour)
+                            for square in Attackedsquares:
                                 square.printcolour = square.activecolour
 
         # Moving ActivePiece.rect
@@ -96,6 +101,10 @@ while running:
 
                     # Deactivate Acceptable squares colour shift
                     for square in AcceptableSquares:
+                        square.printcolour = square.basecolour
+
+                    # Trial code for attacked squares function
+                    for square in Attackedsquares:
                         square.printcolour = square.basecolour
 
                     # Deactivate ActivePiece

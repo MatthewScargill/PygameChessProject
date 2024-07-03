@@ -71,6 +71,16 @@ class Board:
                 if not square.rect.collidepoint(piece.rect.center):  # If no collisions, No piece
                     square.piece = None  # Update Square.piece
 
+    def attackedsquares(self, colour):
+        attackedsquares = []
+        for piece in self.pieces:
+            if piece.colour == colour:
+                tempattackedsquares = Board.acceptablesquares(self, piece)
+                if tempattackedsquares is not None:
+                    for square in tempattackedsquares:
+                        attackedsquares.append(square)
+        return attackedsquares
+
     def acceptablesquares(self, ActivePiece):
 
         AcceptableSquares = []
