@@ -60,7 +60,7 @@ while running:
                             # Activate Acceptable squares colour shift
                             for square in AcceptableSquares:
                                 square.printcolour = square.activecolour
-                            
+
                             # Trial code for attacked squares function
                             Attackedsquares = Board.colourattackedsquares(ActiveBoard, ActivePiece.colour)
                             for square in Attackedsquares:
