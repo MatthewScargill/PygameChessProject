@@ -1,6 +1,7 @@
 import pygame
 from src.Board import Board
 from src.MoveFinder import MoveFinder
+from src.MoveFinder import check_king_attack
 
 # Setting screen and square dimensions
 Dimensions = Window_Width = Window_Height = 800
@@ -60,6 +61,10 @@ while running:
                             # Acceptable squares setup
                             AcceptableSquares = Board.acceptablesquares(ActiveBoard, ActivePiece)[0]
 
+                            #print(AcceptableSquares)
+                            for i in MoveFinder(ActiveBoard, ActivePiece):
+                                print(i.number)
+
                             # Activate Acceptable squares colour shift
                             for square in AcceptableSquares:
                                 square.printcolour = square.activecolour
@@ -69,10 +74,10 @@ while running:
                                 Attackedsquares = Board.colourattackedsquares(ActiveBoard, 'black')
                             else:
                                 Attackedsquares = Board.colourattackedsquares(ActiveBoard, 'white')
-                            '''
+
                             for square in Attackedsquares:
                                 square.printcolour = square.activecolour
-                            '''
+
 
 
         # Moving ActivePiece.rect
@@ -93,11 +98,17 @@ while running:
                             # Update ActiveBoard with new piece positions
                             Board.update(ActiveBoard)
 
+
+
                             # Updating ColourToPlay
                             if ActivePiece.colour == 'white':
                                 ColourToPlay = 'black'
                             else:
                                 ColourToPlay = 'white'
+
+                            print('white in check: ' + str(check_king_attack(ActiveBoard, 'black')))
+                            print('black in check: ' + str(check_king_attack(ActiveBoard, 'white')))
+                            # this now works
 
                             break
 
@@ -115,7 +126,6 @@ while running:
                     # Trial code for attacked squares function
                     for square in Attackedsquares:
                         square.printcolour = square.basecolour
-
 
                     # Deactivate ActivePiece
                     ActivePiece = None

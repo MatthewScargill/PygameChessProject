@@ -1,8 +1,4 @@
-import Board
-
 def MoveFinder(board, Activepiece):
-
-    #tempboard = board.copy()
 
     # finding out what the colours are
     if Activepiece.colour == 'white':
@@ -10,48 +6,56 @@ def MoveFinder(board, Activepiece):
     else:
         attacking_colour = 'white'
 
-    Acceptable_moves = possiblesquares(board, Activepiece)[0]  # array of possible moves for ActivePiece
+    Acceptable_moves = possiblesquares(board, Activepiece)[0]  # array of possible squares for ActivePiece
 
+    print(len(Acceptable_moves))
     for TrialMove in Acceptable_moves:
         trialboard = tempboard(board, Activepiece, TrialMove)
+        print(TrialMove.number)
+        print(check_king_attack(trialboard, attacking_colour))
         if check_king_attack(trialboard, attacking_colour) is True:
             Acceptable_moves.remove(TrialMove)
+            print('snip!')
 
+    return Acceptable_moves
 
 
 # need function that returns tempboard with the move made:
-def tempboard(board, ActivePiece, TrialSquare):
-    for square in board.squares:
+def tempboard(board, ActivePiece, TrialSquare):  # i think this function works given the prints seem to spit out the right thing
+    tempboard = board
+    for square in tempboard.squares:
         if square.rect.collidepoint(ActivePiece.rect.center):
-            TrialSquare.piece = ActivePiece
-            square.piece = None
+            tempboard.squares[TrialSquare.number].piece = ActivePiece
+            tempboard.squares[square.number].piece = None
+            #print(tempboard.squares[TrialSquare.number].number)
+            #print(tempboard.squares[TrialSquare.number].piece)
+            #print(tempboard.squares[square.number].number)
+            #print(tempboard.squares[square.number].piece)
+            #print(tempboard.squares[3].piece)
 
-    return board
+    return tempboard
 
 
-def colourattackedsquares(self, colour):
+def colourattackedsquares(self, colour):  # this function works have tested in main script
     attackedsquares = []
     for piece in self.pieces:
         if piece.colour == colour:
-            tempattackedsquares = Board.acceptablesquares(self, piece)[1]
+            tempattackedsquares = possiblesquares(self, piece)[1]
             if tempattackedsquares is not None:
                 for square in tempattackedsquares:
                     attackedsquares.append(square)
     return attackedsquares
 
 
-def check_king_attack(tempboard, attackingcolour):
+def check_king_attack(tempboard, attackingcolour):  # this function should work
     for piece in tempboard.pieces:
-        if piece.name == 6 and piece.colour != attackingcolour:  # Find king
+        if piece.name == 5 and piece.colour != attackingcolour:
             for square in tempboard.squares:
                 if square.rect.collidepoint(piece.rect.center):
-                    if square in colourattackedsquares(attackingcolour):
+                    if square in colourattackedsquares(tempboard, attackingcolour):
                         return True
                     else:
                         return False
-
-
-
 
 
 def possiblesquares(self, ActivePiece):  # All theoretically accepted moves
