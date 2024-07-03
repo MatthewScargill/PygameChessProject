@@ -1,5 +1,6 @@
 import pygame
 from src.Board import Board
+from src.MoveFinder import MoveFinder
 
 # Setting screen and square dimensions
 Dimensions = Window_Width = Window_Height = 800
@@ -35,6 +36,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
 
+                '''
                 # Troubleshoot code for update Board.update
                 for square in ActiveBoard.squares:
                     if square.rect.collidepoint(pygame.mouse.get_pos()):
@@ -43,6 +45,7 @@ while running:
                         if square.piece is not None:
                             print(square.piece.colour)
                             print(square.piece.name)
+                '''
 
                 for it, piece in enumerate(ActiveBoard.pieces):
                     if piece.colour == ColourToPlay:
@@ -62,9 +65,14 @@ while running:
                                 square.printcolour = square.activecolour
 
                             # Trial code for attacked squares function
-                            Attackedsquares = Board.colourattackedsquares(ActiveBoard, ActivePiece.colour)
+                            if ActivePiece.colour == 'white':
+                                Attackedsquares = Board.colourattackedsquares(ActiveBoard, 'black')
+                            else:
+                                Attackedsquares = Board.colourattackedsquares(ActiveBoard, 'white')
+                            '''
                             for square in Attackedsquares:
                                 square.printcolour = square.activecolour
+                            '''
 
 
         # Moving ActivePiece.rect
