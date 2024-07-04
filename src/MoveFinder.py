@@ -6,37 +6,27 @@ def MoveFinder(board, Activepiece):
     else:
         attacking_colour = 'white'
 
-    Acceptable_moves = possiblesquares(board, Activepiece)[0]  # array of possible squares for ActivePiece
+    PossibleMoves = possiblesquares(board, Activepiece)[0]  # array of possible squares for ActivePiece
 
-    print(len(Acceptable_moves))
-    for TrialMove in Acceptable_moves:
-        trialboard = tempboard(board, Activepiece, TrialMove)
-        print(TrialMove.number)
-        print(check_king_attack(trialboard, attacking_colour))
-        if check_king_attack(trialboard, attacking_colour) is True:
-            Acceptable_moves.remove(TrialMove)
-            print('snip!')
+    AcceptableMoves = []  # new array of acceptable moves
+    for TrialMove in PossibleMoves:
+        trialboard = MakeTempboard(board, Activepiece, TrialMove)
+        if check_king_attack(trialboard, attacking_colour) is False:
+            AcceptableMoves.append(TrialMove)  # append squares which do not lead to check
 
-    return Acceptable_moves
+    return AcceptableMoves
 
 
-# need function that returns tempboard with the move made:
-def tempboard(board, ActivePiece, TrialSquare):  # i think this function works given the prints seem to spit out the right thing
+def MakeTempboard(board, ActivePiece, TrialSquare):  # Makes board with trial move applied
     tempboard = board
     for square in tempboard.squares:
         if square.rect.collidepoint(ActivePiece.rect.center):
             tempboard.squares[TrialSquare.number].piece = ActivePiece
             tempboard.squares[square.number].piece = None
-            #print(tempboard.squares[TrialSquare.number].number)
-            #print(tempboard.squares[TrialSquare.number].piece)
-            #print(tempboard.squares[square.number].number)
-            #print(tempboard.squares[square.number].piece)
-            #print(tempboard.squares[3].piece)
-
     return tempboard
 
 
-def colourattackedsquares(self, colour):  # this function works have tested in main script
+def colourattackedsquares(self, colour):  # Returns squares attacked by colour in board
     attackedsquares = []
     for piece in self.pieces:
         if piece.colour == colour:
@@ -47,7 +37,7 @@ def colourattackedsquares(self, colour):  # this function works have tested in m
     return attackedsquares
 
 
-def check_king_attack(tempboard, attackingcolour):  # this function should work
+def check_king_attack(tempboard, attackingcolour):  # checks if attacking colour has the active colour in check
     for piece in tempboard.pieces:
         if piece.name == 5 and piece.colour != attackingcolour:
             for square in tempboard.squares:
@@ -60,17 +50,16 @@ def check_king_attack(tempboard, attackingcolour):  # this function should work
 
 def possiblesquares(self, ActivePiece):  # All theoretically accepted moves
 
-        AllAcceptableSquares = []
-        AttackedSquares = []
-
-        if ActivePiece.name == 1:  # Pawn
-            for square in self.squares:
-                if square.rect.collidepoint(ActivePiece.rect.center):
-                    if ActivePiece.colour == 'white':
-                        if self.squares[square.number + 8].piece is None:  # Standard movement
-                            AllAcceptableSquares.append(self.squares[square.number + 8])
-                            if self.squares[square.number + 16].piece is None and square.rank == 1:  # Double movement
-                                AllAcceptableSquares.append(self.squares[square.number + 16])
+    AllAcceptableSquares = []
+    AttackedSquares = []
+    if ActivePiece.name == 1:  # Pawns
+        for square in self.squares:
+            if square.rect.collidepoint(ActivePiece.rect.center):
+                if ActivePiece.colour == 'white':
+                    if self.squares[square.number + 8].piece is None:  # Standard movement
+                        AllAcceptableSquares.append(self.squares[square.number + 8])
+                        if self.squares[square.number + 16].piece is None and square.rank == 1:  # Double movement
+                            AllAcceptableSquares.append(self.squares[square.number + 16])
 
                         # Pawn attacks
                         if (self.squares[square.number + 7].piece is not None and self.squares[square.number + 7].piece.
@@ -98,7 +87,7 @@ def possiblesquares(self, ActivePiece):  # All theoretically accepted moves
                             AllAcceptableSquares.append(self.squares[square.number - 9])
                             AttackedSquares.append(self.squares[square.number - 9])
 
-        if ActivePiece.name == 2 or ActivePiece.name == 6:  # Vertical and Horizontal Moves (Rook and half of Queen)
+        if ActivePiece.name == 2 or ActivePiece.name == 6:  # Vertical and Horizontal Moves (Rooks and Queens)
             for square in self.squares:
                 if square.rect.collidepoint(ActivePiece.rect.center):
 
@@ -158,14 +147,14 @@ def possiblesquares(self, ActivePiece):  # All theoretically accepted moves
                                     else:
                                         break
 
-        if ActivePiece.name == 3:  # Knight Moves
+        if ActivePiece.name == 3:  # Knights
             for square in self.squares:
                 if square.rect.collidepoint(ActivePiece.rect.center):
                     knightmoves = [-17, -15, -6, -10, 10, 6, 15, 17]
                     for i in knightmoves:
                         if int(square.number + i) in range(63):
                             if abs(self.squares[square.number + i].rank - square.rank) == 2 and abs(
-                                    self.squares[square.number +i].file - square.file) == 1:
+                                    self.squares[square.number + i].file - square.file) == 1:
                                 if self.squares[square.number + i].piece is None:
                                     AllAcceptableSquares.append(self.squares[square.number + i])
                                     AttackedSquares.append(self.squares[square.number + i])
@@ -183,7 +172,7 @@ def possiblesquares(self, ActivePiece):  # All theoretically accepted moves
                                         AllAcceptableSquares.append(self.squares[square.number + i])
                                         AttackedSquares.append(self.squares[square.number + i])
 
-        if ActivePiece.name == 4 or ActivePiece.name == 6:  # Diagonal Movements (Bishop and half of Queen)
+        if ActivePiece.name == 4 or ActivePiece.name == 6:  # Diagonal Moves (Bishops and Queens)
             for square in self.squares:
                 if square.rect.collidepoint(ActivePiece.rect.center):
 
@@ -247,7 +236,7 @@ def possiblesquares(self, ActivePiece):  # All theoretically accepted moves
                                     else:
                                         break
 
-        if ActivePiece.name == 5:  # King
+        if ActivePiece.name == 5:  # Kings
             for square in self.squares:
                 if square.rect.collidepoint(ActivePiece.rect.center):
                     kingmoves = [-9, -8, -7, -1, 1, 7, 8, 9]
@@ -260,6 +249,5 @@ def possiblesquares(self, ActivePiece):  # All theoretically accepted moves
                                 if self.squares[square.number + i].piece.colour != square.piece.colour:
                                     AllAcceptableSquares.append(self.squares[square.number + i])
                                     AttackedSquares.append(self.squares[square.number + i])
-
 
         return AllAcceptableSquares, AttackedSquares

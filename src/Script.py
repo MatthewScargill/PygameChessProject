@@ -60,10 +60,10 @@ while running:
 
                             # Acceptable squares setup
                             AcceptableSquares = Board.acceptablesquares(ActiveBoard, ActivePiece)[0]
-
                             #print(AcceptableSquares)
-                            for i in MoveFinder(ActiveBoard, ActivePiece):
-                                print(i.number)
+                            print(MoveFinder(ActiveBoard, ActivePiece))
+                            #for i in MoveFinder(ActiveBoard, ActivePiece):
+                                #print(i.number)
 
                             # Activate Acceptable squares colour shift
                             for square in AcceptableSquares:
@@ -129,6 +129,7 @@ while running:
 
                     # Deactivate ActivePiece
                     ActivePiece = None
+                    print('------------------------')
 
     clock.tick(60)  # Set fps to 60
     pygame.display.flip()  # Update screen
