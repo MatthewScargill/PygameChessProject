@@ -48,7 +48,6 @@ while running:
                             OriginalCoordinate = ActivePiece.rect.center
 
                             # Acceptable squares setup
-                            #AcceptableSquares = Board.acceptablesquares(ActiveBoard, ActivePiece)[0]
                             AcceptableSquares = MoveFinder(ActiveBoard, ActivePiece)
 
                             # Activate Acceptable squares colour shift
