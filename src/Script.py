@@ -2,6 +2,7 @@ import pygame
 from src.Board import Board
 from src.MoveFinder import MoveFinder
 from src.MoveFinder import check_king_attack
+from src.MoveFinder import colourattackedsquares
 
 # Setting screen and square dimensions
 Dimensions = Window_Width = Window_Height = 800
@@ -36,18 +37,6 @@ while running:
         # Selecting ActivePiece
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-
-                '''
-                # Troubleshoot code for update Board.update
-                for square in ActiveBoard.squares:
-                    if square.rect.collidepoint(pygame.mouse.get_pos()):
-                        print(square.number)
-                        print(square.piece)
-                        if square.piece is not None:
-                            print(square.piece.colour)
-                            print(square.piece.name)
-                '''
-
                 for it, piece in enumerate(ActiveBoard.pieces):
                     if piece.colour == ColourToPlay:
                         if piece.rect.collidepoint(event.pos):
@@ -59,11 +48,8 @@ while running:
                             OriginalCoordinate = ActivePiece.rect.center
 
                             # Acceptable squares setup
-                            AcceptableSquares = Board.acceptablesquares(ActiveBoard, ActivePiece)[0]
-                            #print(AcceptableSquares)
-                            print(MoveFinder(ActiveBoard, ActivePiece))
-                            #for i in MoveFinder(ActiveBoard, ActivePiece):
-                                #print(i.number)
+                            #AcceptableSquares = Board.acceptablesquares(ActiveBoard, ActivePiece)[0]
+                            AcceptableSquares = MoveFinder(ActiveBoard, ActivePiece)
 
                             # Activate Acceptable squares colour shift
                             for square in AcceptableSquares:
@@ -71,12 +57,14 @@ while running:
 
                             # Trial code for attacked squares function
                             if ActivePiece.colour == 'white':
-                                Attackedsquares = Board.colourattackedsquares(ActiveBoard, 'black')
+                                Attackedsquares = colourattackedsquares(ActiveBoard, 'black')
                             else:
-                                Attackedsquares = Board.colourattackedsquares(ActiveBoard, 'white')
+                                Attackedsquares = colourattackedsquares(ActiveBoard, 'white')
 
+                            #'''
                             for square in Attackedsquares:
                                 square.printcolour = square.activecolour
+                            #'''
 
 
 
@@ -98,8 +86,6 @@ while running:
                             # Update ActiveBoard with new piece positions
                             Board.update(ActiveBoard)
 
-
-
                             # Updating ColourToPlay
                             if ActivePiece.colour == 'white':
                                 ColourToPlay = 'black'
@@ -108,7 +94,6 @@ while running:
 
                             print('white in check: ' + str(check_king_attack(ActiveBoard, 'black')))
                             print('black in check: ' + str(check_king_attack(ActiveBoard, 'white')))
-                            # this now works
 
                             break
 
@@ -123,13 +108,14 @@ while running:
                     for square in AcceptableSquares:
                         square.printcolour = square.basecolour
 
+
                     # Trial code for attacked squares function
                     for square in Attackedsquares:
                         square.printcolour = square.basecolour
 
+
                     # Deactivate ActivePiece
                     ActivePiece = None
-                    print('------------------------')
 
     clock.tick(60)  # Set fps to 60
     pygame.display.flip()  # Update screen

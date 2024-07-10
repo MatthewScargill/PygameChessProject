@@ -7,13 +7,17 @@ def MoveFinder(board, Activepiece):
         attacking_colour = 'white'
 
     PossibleMoves = possiblesquares(board, Activepiece)[0]  # array of possible squares for ActivePiece
+    print(PossibleMoves)
 
     AcceptableMoves = []  # new array of acceptable moves
     for TrialMove in PossibleMoves:
         trialboard = MakeTempboard(board, Activepiece, TrialMove)
         if check_king_attack(trialboard, attacking_colour) is False:
             AcceptableMoves.append(TrialMove)  # append squares which do not lead to check
-
+            print('move found')
+        else:
+            print('snip')
+    print(AcceptableMoves)
     return AcceptableMoves
 
 
@@ -31,9 +35,8 @@ def colourattackedsquares(self, colour):  # Returns squares attacked by colour i
     for piece in self.pieces:
         if piece.colour == colour:
             tempattackedsquares = possiblesquares(self, piece)[1]
-            if tempattackedsquares is not None:
-                for square in tempattackedsquares:
-                    attackedsquares.append(square)
+            for square in tempattackedsquares:
+                attackedsquares.append(square)
     return attackedsquares
 
 
@@ -52,44 +55,51 @@ def possiblesquares(self, ActivePiece):  # All theoretically accepted moves
 
     AllAcceptableSquares = []
     AttackedSquares = []
+
     if ActivePiece.name == 1:  # Pawns
         for square in self.squares:
             if square.rect.collidepoint(ActivePiece.rect.center):
+
                 if ActivePiece.colour == 'white':
                     if self.squares[square.number + 8].piece is None:  # Standard movement
                         AllAcceptableSquares.append(self.squares[square.number + 8])
                         if self.squares[square.number + 16].piece is None and square.rank == 1:  # Double movement
                             AllAcceptableSquares.append(self.squares[square.number + 16])
 
-                        # Pawn attacks
+                    # Pawn attacks
+                    if square.file != 0:
+                        AttackedSquares.append(self.squares[square.number + 7])
                         if (self.squares[square.number + 7].piece is not None and self.squares[square.number + 7].piece.
                                 colour == 'black'):
                             AllAcceptableSquares.append(self.squares[square.number + 7])
-                            AttackedSquares.append(self.squares[square.number + 7])
+                    if square.file != 7:
+                        AttackedSquares.append(self.squares[square.number + 9])
                         if (self.squares[square.number + 9].piece is not None and self.squares[square.number + 9].piece.
                                 colour == 'black'):
                             AllAcceptableSquares.append(self.squares[square.number + 9])
-                            AttackedSquares.append(self.squares[square.number + 9])
 
-                    if ActivePiece.colour == 'black':
-                        if self.squares[square.number - 8].piece is None:  # Standard movement
-                            AllAcceptableSquares.append(self.squares[square.number - 8])
-                            if self.squares[square.number - 16].piece is None and square.rank == 6:  # Double movement
-                                AllAcceptableSquares.append(self.squares[square.number - 16])
 
-                        # Pawn attacks
-                        if (self.squares[square.number - 7].piece is not None and self.squares[square.number - 7].piece.
+                if ActivePiece.colour == 'black':
+                    if self.squares[square.number - 8].piece is None:  # Standard movement
+                        AllAcceptableSquares.append(self.squares[square.number - 8])
+                        if self.squares[square.number - 16].piece is None and square.rank == 6:  # Double movement
+                            AllAcceptableSquares.append(self.squares[square.number - 16])
+
+                    # Pawn attacks
+                    if square.file != 7:
+                        AttackedSquares.append(self.squares[square.number - 7])
+                    if (self.squares[square.number - 7].piece is not None and self.squares[square.number - 7].piece.
                                 colour == 'white'):
-                            AllAcceptableSquares.append(self.squares[square.number - 7])
-                            AttackedSquares.append(self.squares[square.number - 7])
+                        AllAcceptableSquares.append(self.squares[square.number - 7])
+                    if square.file != 0:
+                        AttackedSquares.append(self.squares[square.number - 9])
                         if (self.squares[square.number - 9].piece is not None and self.squares[square.number - 9].piece.
                                 colour == 'white'):
                             AllAcceptableSquares.append(self.squares[square.number - 9])
-                            AttackedSquares.append(self.squares[square.number - 9])
 
-        if ActivePiece.name == 2 or ActivePiece.name == 6:  # Vertical and Horizontal Moves (Rooks and Queens)
-            for square in self.squares:
-                if square.rect.collidepoint(ActivePiece.rect.center):
+    if ActivePiece.name == 2 or ActivePiece.name == 6:  # Vertical and Horizontal Moves (Rooks and Queens)
+        for square in self.squares:
+            if square.rect.collidepoint(ActivePiece.rect.center):
 
                     for i in range(1, 8):  # Right
                         if int(square.number + i) <= 63:  # Check still in range
@@ -147,7 +157,7 @@ def possiblesquares(self, ActivePiece):  # All theoretically accepted moves
                                     else:
                                         break
 
-        if ActivePiece.name == 3:  # Knights
+    if ActivePiece.name == 3:  # Knights
             for square in self.squares:
                 if square.rect.collidepoint(ActivePiece.rect.center):
                     knightmoves = [-17, -15, -6, -10, 10, 6, 15, 17]
@@ -172,71 +182,71 @@ def possiblesquares(self, ActivePiece):  # All theoretically accepted moves
                                         AllAcceptableSquares.append(self.squares[square.number + i])
                                         AttackedSquares.append(self.squares[square.number + i])
 
-        if ActivePiece.name == 4 or ActivePiece.name == 6:  # Diagonal Moves (Bishops and Queens)
-            for square in self.squares:
-                if square.rect.collidepoint(ActivePiece.rect.center):
+    if ActivePiece.name == 4 or ActivePiece.name == 6:  # Diagonal Moves (Bishops and Queens)
+        for square in self.squares:
+            if square.rect.collidepoint(ActivePiece.rect.center):
 
-                    for i in range(1, min(7 - square.rank, square.file) + 1):  # Top Left
-                        if int(square.number + i * 7) <= 63:  # Check still in range
-                            if (self.squares[square.number + i * 7].file == square.file - i
-                                    and self.squares[square.number + i * 7].rank == square.rank + i):
-                                if self.squares[square.number + i * 7].piece is None:
+                for i in range(1, min(7 - square.rank, square.file) + 1):  # Top Left
+                    if int(square.number + i * 7) <= 63:  # Check still in range
+                        if (self.squares[square.number + i * 7].file == square.file - i
+                                and self.squares[square.number + i * 7].rank == square.rank + i):
+                            if self.squares[square.number + i * 7].piece is None:
+                                AllAcceptableSquares.append(self.squares[square.number + i * 7])
+                                AttackedSquares.append(self.squares[square.number + i * 7])
+                            if self.squares[square.number + i * 7].piece is not None:
+                                if self.squares[square.number + i * 7].piece.colour != square.piece.colour:
                                     AllAcceptableSquares.append(self.squares[square.number + i * 7])
                                     AttackedSquares.append(self.squares[square.number + i * 7])
-                                if self.squares[square.number + i * 7].piece is not None:
-                                    if self.squares[square.number + i * 7].piece.colour != square.piece.colour:
-                                        AllAcceptableSquares.append(self.squares[square.number + i * 7])
-                                        AttackedSquares.append(self.squares[square.number + i * 7])
-                                        break
-                                    else:
-                                        break
+                                    break
+                                else:
+                                    break
 
-                    for i in range(1, min(7 - square.rank, 7 - square.file) + 1):  # Top Right
-                        if int(square.number + i * 7) <= 63:  # Check still in range
-                            if (self.squares[square.number + i * 9].file == square.file + i
-                                    and self.squares[square.number + i * 9].rank == square.rank + i):
-                                if self.squares[square.number + i * 9].piece is None:
+                for i in range(1, min(7 - square.rank, 7 - square.file) + 1):  # Top Right
+                    if int(square.number + i * 7) <= 63:  # Check still in range
+                        if (self.squares[square.number + i * 9].file == square.file + i
+                                and self.squares[square.number + i * 9].rank == square.rank + i):
+                            if self.squares[square.number + i * 9].piece is None:
+                                AllAcceptableSquares.append(self.squares[square.number + i * 9])
+                                AttackedSquares.append(self.squares[square.number + i * 9])
+                            if self.squares[square.number + i * 9].piece is not None:
+                                if self.squares[square.number + i * 9].piece.colour != square.piece.colour:
                                     AllAcceptableSquares.append(self.squares[square.number + i * 9])
                                     AttackedSquares.append(self.squares[square.number + i * 9])
-                                if self.squares[square.number + i * 9].piece is not None:
-                                    if self.squares[square.number + i * 9].piece.colour != square.piece.colour:
-                                        AllAcceptableSquares.append(self.squares[square.number + i * 9])
-                                        AttackedSquares.append(self.squares[square.number + i * 9])
-                                        break
-                                    else:
-                                        break
+                                    break
+                                else:
+                                    break
 
-                    for i in range(1, min(square.rank, square.file) + 1):  # Bottom Left
-                        if int(square.number - i * 9) >= 0:  # Check still in range
-                            if (self.squares[square.number - i * 9].file == square.file - i
-                                    and self.squares[square.number - i * 9].rank == square.rank - i):
-                                if self.squares[square.number - i * 9].piece is None:
+                for i in range(1, min(square.rank, square.file) + 1):  # Bottom Left
+                    if int(square.number - i * 9) >= 0:  # Check still in range
+                        if (self.squares[square.number - i * 9].file == square.file - i
+                                and self.squares[square.number - i * 9].rank == square.rank - i):
+                            if self.squares[square.number - i * 9].piece is None:
+                                AllAcceptableSquares.append(self.squares[square.number - i * 9])
+                                AttackedSquares.append(self.squares[square.number - i * 9])
+                            if self.squares[square.number - i * 9].piece is not None:
+                                if self.squares[square.number - i * 9].piece.colour != square.piece.colour:
                                     AllAcceptableSquares.append(self.squares[square.number - i * 9])
                                     AttackedSquares.append(self.squares[square.number - i * 9])
-                                if self.squares[square.number - i * 9].piece is not None:
-                                    if self.squares[square.number - i * 9].piece.colour != square.piece.colour:
-                                        AllAcceptableSquares.append(self.squares[square.number - i * 9])
-                                        AttackedSquares.append(self.squares[square.number - i * 9])
-                                        break
-                                    else:
-                                        break
+                                    break
+                                else:
+                                    break
 
-                    for i in range(1, min(square.rank, 7 - square.file) + 1):  # Bottom Right
-                        if int(square.number - i * 7) >= 0:  # Check still in range
-                            if (self.squares[square.number - i * 7].file == square.file + i
-                                    and self.squares[square.number - i * 7].rank == square.rank - i):
-                                if self.squares[square.number - i * 7].piece is None:
+                for i in range(1, min(square.rank, 7 - square.file) + 1):  # Bottom Right
+                    if int(square.number - i * 7) >= 0:  # Check still in range
+                        if (self.squares[square.number - i * 7].file == square.file + i
+                                and self.squares[square.number - i * 7].rank == square.rank - i):
+                            if self.squares[square.number - i * 7].piece is None:
+                                AllAcceptableSquares.append(self.squares[square.number - i * 7])
+                                AttackedSquares.append(self.squares[square.number - i * 7])
+                            if self.squares[square.number - i * 7].piece is not None:
+                                if self.squares[square.number - i * 7].piece.colour != square.piece.colour:
                                     AllAcceptableSquares.append(self.squares[square.number - i * 7])
                                     AttackedSquares.append(self.squares[square.number - i * 7])
-                                if self.squares[square.number - i * 7].piece is not None:
-                                    if self.squares[square.number - i * 7].piece.colour != square.piece.colour:
-                                        AllAcceptableSquares.append(self.squares[square.number - i * 7])
-                                        AttackedSquares.append(self.squares[square.number - i * 7])
-                                        break
-                                    else:
-                                        break
+                                    break
+                                else:
+                                    break
 
-        if ActivePiece.name == 5:  # Kings
+    if ActivePiece.name == 5:  # Kings
             for square in self.squares:
                 if square.rect.collidepoint(ActivePiece.rect.center):
                     kingmoves = [-9, -8, -7, -1, 1, 7, 8, 9]
@@ -250,4 +260,4 @@ def possiblesquares(self, ActivePiece):  # All theoretically accepted moves
                                     AllAcceptableSquares.append(self.squares[square.number + i])
                                     AttackedSquares.append(self.squares[square.number + i])
 
-        return AllAcceptableSquares, AttackedSquares
+    return AllAcceptableSquares, AttackedSquares
